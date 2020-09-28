@@ -17,7 +17,7 @@ def jeudi(word):
     return word*(len(word)%3)
     
 def vendredi(word):
-    pass
+    return word
 
 def transforme(mot, num_jour):
     jours = [lundi(mot), mardi(mot), mercredi(mot), jeudi(mot), vendredi(mot)]
