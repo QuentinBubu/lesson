@@ -8,7 +8,7 @@ def est_premier(nombre):
     elif nombre == 2:
         return True
     for i in range(2,100):
-        if nombre%i==0 and i != nombre:
+        if nombre%i == 0 and i != nombre:
             return False
     return True
     
