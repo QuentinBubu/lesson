@@ -3,15 +3,14 @@ import time
 def est_premier(nombre):
     if nombre < 0:
         return "Erreur"
-    if nombre%2 == 0 and nombre != 2: #Si il est paire
-        return False
-    elif nombre == 2:
+    if nombre == 2:
         return True
-    for i in range(2,100):
-        if nombre%i == 0 and i != nombre:
+    elif nombre%2 == 0:
+        return False
+    for i in range(2, nombre):
+        if nombre%i == 0:
             return False
     return True
-    
     
 def est_premier2(nombre):
     start_time = time.time()
