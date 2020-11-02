@@ -34,8 +34,7 @@ L = [
     [4, 5, 6],
     [7, 8, 9]
 ]
+print(L)
 
 liste_finale = OppListe(L)
-
-print(L)
 print(liste_finale)
