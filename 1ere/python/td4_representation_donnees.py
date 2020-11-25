@@ -1,3 +1,5 @@
+# 1
+
 import math
 
 dicoTouches = {
@@ -90,3 +92,54 @@ def distance_phrase(phrase):
     for i in range(len(phrase)-1):
         distance += distanceClavier(phrase[i], phrase[i+1])
     return distance
+
+
+# 2 -------------------
+
+def longueurMot(mot):
+    return len(mot)
+
+def occurenceLettre(mot, lettre):
+    count = 0
+    for i in list(mot):
+        if i == lettre:
+            count += 1
+    return count
+
+def dicoTexteVersOccurrrence(mot):
+    lettres = {}
+    for i in list(mot):
+        if i in lettres:
+            lettres[i] += 1
+        else:
+            lettres[i] = 1
+    return lettres
+
+def dicoLettreFreq(text):
+    frequence = dicoTexteVersOccurrrence(text)
+    del frequence[" "]
+    for k, v in frequence.items():
+        frequence[k] = round(v/len(list(filter((" ").__ne__, text)))*100, 2)
+    
+    return frequence
+
+def dicoVersDicoFreqDecr(dico):
+    return sorted(dico, key=dico.values())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

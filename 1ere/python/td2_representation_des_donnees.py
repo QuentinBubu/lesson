@@ -1,37 +1,15 @@
 # Ex 1
-<<<<<<< HEAD
 import math
-=======
-<<<<<<< HEAD
-import math
-=======
->>>>>>> 1a90bc52700091114c12dc5cb52c45c8bdabeec6
->>>>>>> 9d2f84812378e3bb2ebcba83c5d7c4dee89cbc3f
 """
 listInf = [i for i in range(0,1000)]
 print(listInf)
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 9d2f84812378e3bb2ebcba83c5d7c4dee89cbc3f
 listCarres = [i**2 for i in listInf if p**2 <= 1000]
 # Or
 #listCarres = [i**2 for i in range(0,1000)]
 #print(listCarres)
 
 listBaseCarres = [math.sqrt(i) for i in listCarres if i < 1000]
-<<<<<<< HEAD
-=======
-=======
-listCarres = [i**2 for i in listInf]
-# Or
-listCarres = [i**2 for i in range(0,1000)]
-print(listCarres)
-
-listBaseCarres = [i for i in listCarres if i < 1000]
->>>>>>> 1a90bc52700091114c12dc5cb52c45c8bdabeec6
->>>>>>> 9d2f84812378e3bb2ebcba83c5d7c4dee89cbc3f
 print(listBaseCarres)
 
 listCubes = [i**3 for i in range(0,1000)]

@@ -36,6 +36,8 @@ def fonct(n):
     
 fonct(3)
 
+# 4
+
 def fact(n):
     if n > 0:
         return n*fact(n-1)
@@ -52,6 +54,45 @@ def fib(number):
         print("-----")
         return number+fib(number-1)
     return 0
+
+
+
+
+
+
+def fact(n):
+    if n > 0:
+        return n*fact(n-1)
+    else:
+        return 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
