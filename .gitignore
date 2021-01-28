@@ -1,5 +1,7 @@
 *.pdf
 .history/*
-perso/*/.history/*
-perso/laravel8/*
-1ere/python/.history/*
+*/.history/*
+*/*/.history/*
+*/*/*/.history/*
+*/*/*/*/.history/*
+*/laravel8/*
