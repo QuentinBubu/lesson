@@ -94,20 +94,22 @@ verify.addEventListener("click", function () {
                 element.removeAttribute("contenteditable");
                 const form = element.getAttribute("data-verbs");
                 const reponse = element.textContent.toLowerCase();
-                if (reponse !== data[word][form]) {
-                    if (typeof(data[word][form]) === "string") {
+                if (typeof(data[word][form]) === "string") {
+                    if (reponse !== data[word][form]) {
                         element.innerHTML = `
                                             <p class="red">${reponse}</p>
                                             <p class="green">${data[word][form]}</p>
                                             `;
-                    } else {
+                        error = true;
+                    }
+                } else {
+                    let reponseSplit = reponse.split(', ');
+                    if (!reponseSplit.includes(data[word][form][1]) && !reponseSplit.includes(data[word][form][2])) {}
                         element.innerHTML = `
                                             <p class="red">${reponse}</p>
                                             <p class="green">${data[word][form][1]}, ${data[word][form][2]}</p>
                                             `;
-                    }
-
-                    error = true;
+                        error = true;
                 }
                 if (form === "Traduction") {
                     element.innerHTML = `${element.innerHTML} <img src="./assets/pronunciation.svg" data-lang="fr" data-verb="${data[word][form]}" class="pronunciation">`;
