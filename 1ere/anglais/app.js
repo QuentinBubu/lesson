@@ -2,6 +2,8 @@ let form = document.querySelector("#form");
 let selection = document.querySelector("#selection");
 let tbody = document.querySelector("#tbody");
 let score = document.querySelector("#score");
+const save = document.querySelector("#save");
+const load = document.querySelector("#load");
 const selectInput = document.querySelector("#selectInput");
 const startTest = document.querySelector("#startTest");
 const returnButton = document.querySelector("#return");
@@ -25,6 +27,26 @@ const subject = [
 ];
 
 const mode = ['affirmative', 'négative', 'interrogative'];
+
+save.addEventListener('click', function () {
+    let final = "(";
+    const sentences = document.querySelectorAll('.sentences:checked');
+    sentences.forEach((element) => {
+        final += element.getAttribute('value') + "/";
+    });
+    final = final.slice(0, -1) + ")(";
+
+    const verbs = document.querySelectorAll(".choose:checked");
+    verbs.forEach((element) => {
+        final += element.getAttribute("value") + "/";
+    });
+    final = final.slice(0, -1) + ")";
+    // https://www.codegrepper.com/code-examples/delphi/javascript+create+text+file+and+download
+    // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/encodeURI
+    // http://jsfiddle.net/VBJ9h/319/
+    // https://plnkr.co/edit/DbBfnc6XaMppCvkEoqql?p=preview&preview
+});
+
 
 window.addEventListener("load", async function () {
     try {
