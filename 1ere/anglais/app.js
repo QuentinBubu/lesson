@@ -16,21 +16,15 @@ const values = {
 };
 
 const subject = [
-    ['Première pers. sing.', 'i'],
-    ['Seconde pers. sing.', 'you'],
-    ['Troisième pers. sing.', ['he', 'she', 'it']],
-    ['Première pers. plur.', 'we'],
-    ['Seconde pers. plur.', 'you'],
-    ['Troisième pers. plur.', 'they']
+    ['Première pers. sing.', 'I'],
+    ['Seconde pers. sing.', 'You'],
+    ['Troisième pers. sing.', ['He', 'She', 'It']],
+    ['Première pers. plur.', 'We'],
+    ['Seconde pers. plur.', 'You'],
+    ['Troisième pers. plur.', 'They']
 ];
 
-const auxi = {
-    'prétérit': 'did',
-    'present-perfect': [
-        'have', 'has'
-    ],
-    'past-perfect': 'had'
-}
+const mode = ['affirmative', 'négative', 'interrogative'];
 
 window.addEventListener("load", async function () {
     try {
@@ -97,22 +91,34 @@ startTest.addEventListener("click", function () {
             lastTr.appendChild(td);
         }
 
-        if (Array.isArray(sentences) && sentences.length) {
-            temps = []
+        if (sentences.length !== 0) {
+            temps = [];
             sentences.forEach((element) => {
                 temps.push(element.getAttribute('value'));
             });
-            temps = Math.floor(Math.floor() * Math.floor(temps.length))
+            temps_tr = temps[Math.floor(Math.random() * Math.floor(temps.length))];
+            subject_tr = subject[Math.floor(Math.random() * Math.floor(subject.length))][0];
+            mode_tr = mode[Math.floor(Math.random() * Math.floor(mode.length))];
+
+            lastTr.setAttribute('data-temps', temps_tr);
+            lastTr.setAttribute('data-subject', subject_tr);
+            lastTr.setAttribute('data-mode', mode_tr);
+
             let td = document.createElement("td");
-            td.setAttribute('data-temps', temps);
-            td.setAttribute('data-subject', )
+            td.innerText = `${subject_tr} ${mode_tr} ${temps_tr}`;
+            td.setAttribute('data-pass', true);
+            lastTr.appendChild(td);
+
+            td = document.createElement("td");
+            td.setAttribute('data-pass', true);
+            td.setAttribute("contenteditable", true);
             lastTr.appendChild(td);
         }
     });
 });
 
 verify.addEventListener("click", function () {
-    if (verify.textContent === "Vérifier") {
+    if (verify.innerText === "Vérifier") {
         const lines = document.querySelectorAll("#tbody > tr");
         let nb_points = 0;
         let nb_word = 0;
@@ -121,9 +127,10 @@ verify.addEventListener("click", function () {
             const td = element.querySelectorAll("td");
             const word = element.getAttribute("data-word");
             td.forEach((element) => {
+                if (element.hasAttribute('data-pass')) return;
                 element.removeAttribute("contenteditable");
                 const form = element.getAttribute("data-verbs");
-                const reponse = element.textContent.toLowerCase();
+                const reponse = element.innerText.toLowerCase();
                 if (typeof(data[word][form]) === "string") {
                     if (reponse !== data[word][form]) {
                         element.innerHTML = `
@@ -152,7 +159,26 @@ verify.addEventListener("click", function () {
                 nb_points++;
             }
             nb_word++;
+            
+            if (
+                element.hasAttribute('data-temps')
+                && element.hasAttribute('data-subject')
+                && element.hasAttribute('data-mode')
+            ) {
+                nb_word++;
+                const reponse = verify_sentences(element);
+                if(reponse === true) {
+                    nb_points++;
+                } else {
+                    let saisie = element.querySelector('td:last-child');
+                    saisie.innerHTML = `
+                                            <p class="red">${saisie.textContent}</p>
+                                            <p class="green">${reponse}</p>
+                                        `;
+                }
+            }
         });
+
         score.textContent = `Score: ${nb_points} / ${nb_word}`;
         refresh();
     } else {
@@ -162,16 +188,16 @@ verify.addEventListener("click", function () {
 
 selectInput.addEventListener("click", function () {
     const input = document.querySelectorAll("input");
-    if (selectInput.textContent === "Tout sélectionner") {
+    if (selectInput.innerText === "Tout sélectionner") {
         input.forEach((element) => {
             element.setAttribute("checked", true);
         });
-        selectInput.textContent = "Tout désélectionner";
+        selectInput.innerText = "Tout désélectionner";
     } else {
         input.forEach((element) => {
             element.removeAttribute("checked");
         });
-        selectInput.textContent = "Tout sélectionner";
+        selectInput.innerText = "Tout sélectionner";
     }
 });
 
@@ -184,8 +210,8 @@ function menu() {
     tr.forEach((element) => {
         element.remove();
     });
-    score.textContent = "Score:";
-    verify.textContent = "Vérifier";
+    score.innerText = "Score:";
+    verify.innerText = "Vérifier";
 }
 
 function refresh() {
@@ -202,5 +228,125 @@ function refresh() {
             }
         });
     });
-    verify.textContent = "Retour";
+    verify.innerText = "Retour";
+}
+
+function verify_sentences(element) {
+    const temps_tr = element.getAttribute('data-temps');
+    const subject_tr = element.getAttribute('data-subject');
+    const mode_tr = element.getAttribute('data-mode');
+    const verb_tr = element.getAttribute('data-word');
+    const text_tr = element.innerText;
+
+    let sentence = new MakeSentence(
+        text_tr,
+        temps_tr,
+        subject_tr,
+        mode_tr,
+        verb_tr
+    ).sentence;
+    sentence = sentence.toLowerCase();
+    if (text_tr.toLowerCase().includes(sentence)) {
+        return true;
+    } else {
+        if (sentence.match(/ I /)) {
+            const sentence_split = sentence.split(' i ');
+            sentence = `${sentence_split[0]} ${sentence_split[1].toUpperCase()} ${sentence[2]}`;
+        }
+        return sentence.charAt(0).toUpperCase() + sentence.slice(1);
+    }
+
+}
+
+class MakeSentence {
+    constructor (text, temps, subject, mode, verb) {
+        this.text = text;
+        this.temps = temps;
+        this.subject = subject;
+        this.mode = mode;
+        this.verb = verb;
+        this.old = {
+            'temps': this.temps,
+            'subject': this.subject,
+            'mode': this.mode,
+            'verb': this.verb
+        };
+        this.call();
+        return {'sentence': this.final};
+    }
+
+    call() {
+        this.f_verb();
+        this.f_auxiliaire();
+        this.f_negative();
+        this.f_subject();
+        this.make();
+    }
+
+    f_verb() {
+        if (
+            this.temps === "present-perfect"
+            || this.temps === "past-perfect"
+        ) {
+            this.verb = data[this.verb]['Participe passé'];
+        } else if (this.temps === "prétérit") {
+            if (this.mode === "affirmative") {
+                this.verb = data[this.verb]['Prétérit'];
+            } else {
+                this.verb = data[this.verb]['Base verbale'];
+            }
+        }
+    }
+
+    f_auxiliaire() {
+        if (this.temps === "prétérit") {
+            if (
+                this.mode === "négative"
+                || this.mode === "interrogative"
+            ) {
+                this.auxiliaire = "did";
+            } else {
+                this.auxiliaire = "";
+            }
+        } else if (this.temps === "present-perfect") {
+            if (this.subject === subject[2][0]) {
+                this.auxiliaire = "has";
+            } else {
+                this.auxiliaire = "have";
+            }
+        } else if (this.temps === "past-perfect") {
+            this.auxiliaire = "had";
+        }
+    }
+
+    f_negative() {
+        if (this.mode === "négative") {
+            this.mode = "not"
+        }
+    }
+
+    f_subject() {
+        subject.forEach((element) => {
+            if (element[0].toLowerCase() === this.subject.toLowerCase()) {
+                this.subject = element[1];
+            }
+            if (Array.isArray(this.subject)) {
+                if (this.text.match(/s?he|it/ig).length === 1) {
+                    this.subject = this.text.match(/s?he|it/ig)[0];
+                } else {
+                    this.subject = "he";
+                }
+            }
+        });
+    }
+
+    make() {
+        if (this.old['mode'] === 'affirmative') {
+            this.final = `${this.subject} ${this.auxiliaire} ${this.verb}`;
+        } else if (this.old['mode'] === 'négative') {
+            this.final = `${this.subject} ${this.auxiliaire} ${this.mode} ${this.verb}`;
+        } else if (this.old['mode'] === 'interrogative') {
+            this.final = `${this.auxiliaire} ${this.subject} ${this.verb}?`;
+        }
+    }
 }
